@@ -54,5 +54,11 @@ const spin = () => {
         >
             {{ (slotMachine?.score.score ?? 0).toString().padStart(4, "0") }}
         </span>
+        <span
+            v-if="(slotMachine?.lastWin ?? 0) > 0"
+            class="monoton-regular reel-icon flex h-full items-center justify-center border-2 border-blue-400 bg-transparent px-4 py-3 text-8xl font-bold text-blue-400 shadow-[0_0_10px_rgba(96,165,250,0.6),0_0_20px_rgba(96,165,250,0.4),inset_0_0_10px_rgba(96,165,250,0.3)] [text-shadow:0_0_5px_rgba(96,165,250,0.8),0_0_10px_rgba(96,165,250,0.8),0_0_20px_rgba(96,165,250,1)]"
+        >
+            +{{ slotMachine?.lastWin ?? 0 }}
+        </span>
     </div>
 </template>

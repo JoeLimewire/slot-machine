@@ -18,6 +18,7 @@ export default class SlotMachine {
     score = new Score();
     isSpinning = false;
     result: string[][] = [];
+    lastWin = 0; // points awarded by the most recent spin
 
     private reels: Reel[] = [];
     private evaluator = new WinEvaluator();
@@ -47,6 +48,7 @@ export default class SlotMachine {
         if (this.isSpinning) return;
         this.isSpinning = true;
         this.result = [];
+        this.lastWin = 0;
 
         try {
             await ReelAudio.unlock();
@@ -66,6 +68,7 @@ export default class SlotMachine {
             for (const win of this.evaluator.evaluate(grid)) {
                 console.log(win.description);
                 this.score.addScore(win.points);
+                this.lastWin += win.points;
             }
         } finally {
             // Always re-enable the button, even if a spin throws.

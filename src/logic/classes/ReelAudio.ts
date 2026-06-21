@@ -14,7 +14,7 @@ export default class ReelAudio {
 
     constructor() {
         this.synth = new Tone.MonoSynth({
-            oscillator: { type: "square" },
+            oscillator: { type: "sine" },
             volume: -15,
         }).toDestination();
     }

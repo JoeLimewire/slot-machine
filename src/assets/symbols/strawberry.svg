@@ -1,1 +1,95 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200"><style>@keyframes sb_flick{0%,100%{opacity:1}43%{opacity:1}44%{opacity:.74}45%{opacity:1}46%{opacity:.9}47%{opacity:1}70%{opacity:1}71%{opacity:.85}72%{opacity:1}}.sb_neon{animation:sb_flick 5.38s infinite ease-in-out;animation-delay:-1.54s;will-change:opacity}@media(prefers-reduced-motion:reduce){.sb_neon{animation:none}}</style><defs><filter id="sb_gw" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="6.5"/></filter><filter id="sb_gs" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.4"/></filter><path id="sb_p1" d="M100,72 C76,62 52,74 50,98 C48,126 76,152 100,170 C124,152 152,126 150,98 C148,74 124,62 100,72 Z"/><path id="sb_p2" d="M100,35 L105.5,52.5 L123.4,48.5 L111,62 L123.4,75.5 L105.5,71.5 L100,89 L94.5,71.5 L76.6,75.5 L89,62 L76.6,48.5 L94.5,52.5 Z"/><path id="sb_p3" d="M100,48 L100,34"/><path id="sb_p4" d="M79.4,98 A2.6,2.6 0 0 1 84.6,98 A2.6,2.6 0 0 1 79.4,98 Z"/><path id="sb_p5" d="M97.4,92 A2.6,2.6 0 0 1 102.6,92 A2.6,2.6 0 0 1 97.4,92 Z"/><path id="sb_p6" d="M115.4,98 A2.6,2.6 0 0 1 120.6,98 A2.6,2.6 0 0 1 115.4,98 Z"/><path id="sb_p7" d="M69.4,120 A2.6,2.6 0 0 1 74.6,120 A2.6,2.6 0 0 1 69.4,120 Z"/><path id="sb_p8" d="M88.4,114 A2.6,2.6 0 0 1 93.6,114 A2.6,2.6 0 0 1 88.4,114 Z"/><path id="sb_p9" d="M106.4,114 A2.6,2.6 0 0 1 111.6,114 A2.6,2.6 0 0 1 106.4,114 Z"/><path id="sb_p10" d="M125.4,120 A2.6,2.6 0 0 1 130.6,120 A2.6,2.6 0 0 1 125.4,120 Z"/><path id="sb_p11" d="M82.4,140 A2.6,2.6 0 0 1 87.6,140 A2.6,2.6 0 0 1 82.4,140 Z"/><path id="sb_p12" d="M101.4,136 A2.6,2.6 0 0 1 106.6,136 A2.6,2.6 0 0 1 101.4,136 Z"/><path id="sb_p13" d="M119.4,140 A2.6,2.6 0 0 1 124.6,140 A2.6,2.6 0 0 1 119.4,140 Z"/><path id="sb_p14" d="M97.4,156 A2.6,2.6 0 0 1 102.6,156 A2.6,2.6 0 0 1 97.4,156 Z"/><path id="sb_p15" d="M80.91,98 A1.09,1.09 0 0 1 83.09,98 A1.09,1.09 0 0 1 80.91,98 Z"/><path id="sb_p16" d="M98.91,92 A1.09,1.09 0 0 1 101.09,92 A1.09,1.09 0 0 1 98.91,92 Z"/><path id="sb_p17" d="M116.91,98 A1.09,1.09 0 0 1 119.09,98 A1.09,1.09 0 0 1 116.91,98 Z"/><path id="sb_p18" d="M70.91,120 A1.09,1.09 0 0 1 73.09,120 A1.09,1.09 0 0 1 70.91,120 Z"/><path id="sb_p19" d="M89.91,114 A1.09,1.09 0 0 1 92.09,114 A1.09,1.09 0 0 1 89.91,114 Z"/><path id="sb_p20" d="M107.91,114 A1.09,1.09 0 0 1 110.09,114 A1.09,1.09 0 0 1 107.91,114 Z"/><path id="sb_p21" d="M126.91,120 A1.09,1.09 0 0 1 129.09,120 A1.09,1.09 0 0 1 126.91,120 Z"/><path id="sb_p22" d="M83.91,140 A1.09,1.09 0 0 1 86.09,140 A1.09,1.09 0 0 1 83.91,140 Z"/><path id="sb_p23" d="M102.91,136 A1.09,1.09 0 0 1 105.09,136 A1.09,1.09 0 0 1 102.91,136 Z"/><path id="sb_p24" d="M120.91,140 A1.09,1.09 0 0 1 123.09,140 A1.09,1.09 0 0 1 120.91,140 Z"/><path id="sb_p25" d="M98.91,156 A1.09,1.09 0 0 1 101.09,156 A1.09,1.09 0 0 1 98.91,156 Z"/></defs><g class="sb_neon"><g filter="url(#sb_gw)"><g stroke="#ff2e63" stroke-width="16.0" opacity="0.26" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#sb_p1"/></g><g stroke="#39ff8b" stroke-width="16.0" opacity="0.26" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#sb_p2"/><use href="#sb_p3"/></g><g fill="#ffd86b" opacity="0.22"><use href="#sb_p4"/><use href="#sb_p5"/><use href="#sb_p6"/><use href="#sb_p7"/><use href="#sb_p8"/><use href="#sb_p9"/><use href="#sb_p10"/><use href="#sb_p11"/><use href="#sb_p12"/><use href="#sb_p13"/><use href="#sb_p14"/></g></g><g filter="url(#sb_gs)"><g stroke="#ff2e63" stroke-width="9.0" opacity="0.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#sb_p1"/></g><g stroke="#39ff8b" stroke-width="9.0" opacity="0.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#sb_p2"/><use href="#sb_p3"/></g><g fill="#ffd86b" opacity="0.50"><use href="#sb_p4"/><use href="#sb_p5"/><use href="#sb_p6"/><use href="#sb_p7"/><use href="#sb_p8"/><use href="#sb_p9"/><use href="#sb_p10"/><use href="#sb_p11"/><use href="#sb_p12"/><use href="#sb_p13"/><use href="#sb_p14"/></g></g><g stroke="#ff2e63" stroke-width="6.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#sb_p1"/></g><g stroke="#39ff8b" stroke-width="6.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#sb_p2"/><use href="#sb_p3"/></g><g fill="#ffd86b"><use href="#sb_p4"/><use href="#sb_p5"/><use href="#sb_p6"/><use href="#sb_p7"/><use href="#sb_p8"/><use href="#sb_p9"/><use href="#sb_p10"/><use href="#sb_p11"/><use href="#sb_p12"/><use href="#sb_p13"/><use href="#sb_p14"/></g><g fill="#ffffff" opacity="0.85"><use href="#sb_p15"/><use href="#sb_p16"/><use href="#sb_p17"/><use href="#sb_p18"/><use href="#sb_p19"/><use href="#sb_p20"/><use href="#sb_p21"/><use href="#sb_p22"/><use href="#sb_p23"/><use href="#sb_p24"/><use href="#sb_p25"/></g><g stroke="#ffeef2" stroke-width="2.0" opacity="0.92" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#sb_p1"/></g><g stroke="#effff5" stroke-width="2.0" opacity="0.92" fill="none" stroke-linecap="round" stroke-linejoin="round"><use href="#sb_p2"/><use href="#sb_p3"/></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <style>
+    @keyframes sb_flick{0%,100%{opacity:1}42%{opacity:1}43%{opacity:.74}44%{opacity:1}45%{opacity:.9}46%{opacity:1}70%{opacity:1}71%{opacity:.85}72%{opacity:1}}
+    .sb_neon{animation:sb_flick 5.4s infinite ease-in-out;animation-delay:-1.6s;will-change:opacity}
+    @media(prefers-reduced-motion:reduce){.sb_neon{animation:none}}
+  </style>
+  <defs>
+    <filter id="sb_wide" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="6.2"/></filter>
+    <filter id="sb_soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.3"/></filter>
+
+    <!-- strawberry body: rounded shoulders + central dip, tapering to a soft point -->
+    <path id="sb_body" fill="none" d="M100,80
+      C90,69 76,66 64,70
+      C50,75 47,92 48,104
+      C49,124 72,150 100,166
+      C128,150 151,124 152,104
+      C153,92 150,75 136,70
+      C124,66 110,69 100,80 Z"/>
+
+    <!-- calyx: a single leaf, repeated by rotation -->
+    <path id="sb_leaf" fill="none" d="M100,80 Q92,58 100,36 Q108,58 100,80 Z"/>
+    <g id="sb_calyx" fill="none">
+      <use href="#sb_leaf"/>
+      <use href="#sb_leaf" transform="rotate(34 100 80)"/>
+      <use href="#sb_leaf" transform="rotate(-34 100 80)"/>
+      <use href="#sb_leaf" transform="rotate(66 100 80)"/>
+      <use href="#sb_leaf" transform="rotate(-66 100 80)"/>
+    </g>
+    <path id="sb_stem" fill="none" d="M100,42 C101,35 99,31 100,26"/>
+
+    <!-- seed + highlight -->
+    <ellipse id="sb_seed" cx="0" cy="0" rx="2" ry="3.3"/>
+    <ellipse id="sb_seedh" cx="-0.7" cy="-1.1" rx="0.7" ry="1.2"/>
+    <g id="sb_seeds">
+      <use href="#sb_seed" transform="translate(82,94) rotate(-36.9)"/>
+      <use href="#sb_seed" transform="translate(100,94) rotate(0.0)"/>
+      <use href="#sb_seed" transform="translate(118,94) rotate(36.9)"/>
+      <use href="#sb_seed" transform="translate(72,108) rotate(-36.4)"/>
+      <use href="#sb_seed" transform="translate(90,108) rotate(-14.7)"/>
+      <use href="#sb_seed" transform="translate(110,108) rotate(14.7)"/>
+      <use href="#sb_seed" transform="translate(128,108) rotate(36.4)"/>
+      <use href="#sb_seed" transform="translate(80,122) rotate(-21.0)"/>
+      <use href="#sb_seed" transform="translate(100,122) rotate(0.0)"/>
+      <use href="#sb_seed" transform="translate(120,122) rotate(21.0)"/>
+      <use href="#sb_seed" transform="translate(90,136) rotate(-8.6)"/>
+      <use href="#sb_seed" transform="translate(110,136) rotate(8.6)"/>
+      <use href="#sb_seed" transform="translate(100,149) rotate(0.0)"/>
+    </g>
+    <g id="sb_seedhi">
+      <use href="#sb_seedh" transform="translate(82,94) rotate(-36.9)"/>
+      <use href="#sb_seedh" transform="translate(100,94) rotate(0.0)"/>
+      <use href="#sb_seedh" transform="translate(118,94) rotate(36.9)"/>
+      <use href="#sb_seedh" transform="translate(72,108) rotate(-36.4)"/>
+      <use href="#sb_seedh" transform="translate(90,108) rotate(-14.7)"/>
+      <use href="#sb_seedh" transform="translate(110,108) rotate(14.7)"/>
+      <use href="#sb_seedh" transform="translate(128,108) rotate(36.4)"/>
+      <use href="#sb_seedh" transform="translate(80,122) rotate(-21.0)"/>
+      <use href="#sb_seedh" transform="translate(100,122) rotate(0.0)"/>
+      <use href="#sb_seedh" transform="translate(120,122) rotate(21.0)"/>
+      <use href="#sb_seedh" transform="translate(90,136) rotate(-8.6)"/>
+      <use href="#sb_seedh" transform="translate(110,136) rotate(8.6)"/>
+      <use href="#sb_seedh" transform="translate(100,149) rotate(0.0)"/>
+    </g>
+  </defs>
+
+  <g class="sb_neon" transform="translate(100,100) rotate(30) scale(0.92) translate(-100,-97)">
+
+    <!-- WIDE GLOW -->
+    <g filter="url(#sb_wide)">
+      <use href="#sb_body"  stroke="#ff2e63" stroke-width="16" opacity="0.27" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#sb_calyx" stroke="#23ff86" stroke-width="13" opacity="0.27" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#sb_stem"  stroke="#23ff86" stroke-width="13" opacity="0.27" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#sb_seeds" fill="#ffd86b" opacity="0.2"/>
+    </g>
+    <!-- SOFT GLOW -->
+    <g filter="url(#sb_soft)">
+      <use href="#sb_body"  stroke="#ff3b6b" stroke-width="8.5" opacity="0.55" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#sb_calyx" stroke="#39ff8b" stroke-width="7"   opacity="0.55" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#sb_stem"  stroke="#39ff8b" stroke-width="7"   opacity="0.55" stroke-linecap="round" stroke-linejoin="round"/>
+      <use href="#sb_seeds" fill="#ffd86b" opacity="0.5"/>
+    </g>
+
+    <!-- CORES -->
+    <use href="#sb_body"  stroke="#ff4d77" stroke-width="6"   stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#sb_calyx" stroke="#5bff9f" stroke-width="5"   stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#sb_stem"  stroke="#5bff9f" stroke-width="5"   stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#sb_seeds" fill="#ffe08a"/>
+    <use href="#sb_seedhi" fill="#ffffff" opacity="0.9"/>
+
+    <!-- HOT INNER LINES -->
+    <use href="#sb_body"  stroke="#ffe2ea" stroke-width="1.7" opacity="0.92" stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#sb_calyx" stroke="#effff5" stroke-width="1.6" opacity="0.92" stroke-linecap="round" stroke-linejoin="round"/>
+    <use href="#sb_stem"  stroke="#effff5" stroke-width="1.6" opacity="0.92" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
