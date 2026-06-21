@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <style>
+    @keyframes gr_flick{
+      0%,100%{opacity:1}
+      41%{opacity:1}42%{opacity:.72}43%{opacity:1}
+      44%{opacity:.92}45%{opacity:1}
+      72%{opacity:1}73%{opacity:.82}74%{opacity:1}
+    }
+    .gr_neon{animation:gr_flick 6.2s infinite ease-in-out;animation-delay:-1.6s;will-change:opacity}
+    @media(prefers-reduced-motion:reduce){.gr_neon{animation:none}}
+  </style>
+  <defs>
+
+    <filter id="gr_wide" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="6.2"/>
+    </filter>
+    <filter id="gr_soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="2.3"/>
+    </filter>
+
+    <!-- grape cluster: 3-4-3-2-1 taper -->
+    <g id="gr_grapes" fill="transparent">
+      <circle cx="71"  cy="88"  r="15"/>
+      <circle cx="97"  cy="88"  r="15"/>
+      <circle cx="123" cy="88"  r="15"/>
+      <circle cx="58"  cy="111" r="15"/>
+      <circle cx="84"  cy="111" r="15"/>
+      <circle cx="110" cy="111" r="15"/>
+      <circle cx="136" cy="111" r="15"/>
+      <circle cx="71"  cy="134" r="15"/>
+      <circle cx="97"  cy="134" r="15"/>
+      <circle cx="123" cy="134" r="15"/>
+      <circle cx="84"  cy="157" r="15"/>
+      <circle cx="110" cy="157" r="15"/>
+      <circle cx="97"  cy="180" r="15"/>
+    </g>
+
+    <!-- vine: stem, tendril curl, leaf + veins -->
+    <g id="gr_vine" fill="transparent" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M97,73 C99,64 104,58 113,55"/>
+      <path d="M105,60 C92,54 90,41 101,39 C108,38 107,47 100,46"/>
+      <path d="M113,55 Q129,23 165,24 Q151,54 113,55 Z"/>
+      <path d="M120,52 L159,28"/>
+      <path d="M132,45 L141,33"/>
+      <path d="M143,41 L153,31"/>
+      <path d="M127,49 L133,40"/>
+    </g>
+
+    <!-- specular highlights -->
+    <g id="gr_spec" fill="transparent">
+      <circle cx="66"  cy="83"  r="2.6"/>
+      <circle cx="92"  cy="83"  r="2.6"/>
+      <circle cx="118" cy="83"  r="2.6"/>
+      <circle cx="53"  cy="106" r="2.6"/>
+      <circle cx="79"  cy="106" r="2.6"/>
+      <circle cx="105" cy="106" r="2.6"/>
+      <circle cx="131" cy="106" r="2.6"/>
+      <circle cx="66"  cy="129" r="2.6"/>
+      <circle cx="92"  cy="129" r="2.6"/>
+      <circle cx="118" cy="129" r="2.6"/>
+      <circle cx="79"  cy="152" r="2.6"/>
+      <circle cx="105" cy="152" r="2.6"/>
+      <circle cx="92"  cy="175" r="2.6"/>
+    </g>
+  </defs>
+
+ 
+
+  <g class="gr_neon" transform="translate(100,100) rotate(40) scale(0.84) translate(-104,-109)">
+    <!-- WIDE GLOW -->
+    <g filter="url(#gr_wide)">
+      <use href="#gr_grapes" stroke="#b026ff" stroke-width="17" opacity="0.28"/>
+      <use href="#gr_vine"   stroke="#23ff86" stroke-width="17" opacity="0.28"/>
+    </g>
+    <!-- SOFT GLOW -->
+    <g filter="url(#gr_soft)">
+      <use href="#gr_grapes" stroke="#cf5bff" stroke-width="8.5" opacity="0.55"/>
+      <use href="#gr_vine"   stroke="#39ff8b" stroke-width="8.5" opacity="0.55"/>
+    </g>
+    <!-- CORE -->
+    <use href="#gr_grapes" stroke="#d774ff" stroke-width="5"/>
+    <use href="#gr_vine"   stroke="#5bff9f" stroke-width="5"/>
+    <!-- HOT INNER LINE -->
+    <use href="#gr_grapes" stroke="#fbeeff" stroke-width="1.6" opacity="0.95"/>
+    <use href="#gr_vine"   stroke="#eefff4" stroke-width="1.6" opacity="0.95"/>
+    <!-- SPECULAR -->
+    <use href="#gr_spec" filter="url(#gr_soft)" opacity="0.5"/>
+    <use href="#gr_spec" opacity="0.9"/>
+  </g>
+</svg>

@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+    <style>@keyframes br_flick{0%,100%{opacity:1}43%{opacity:1}44%{opacity:.74}45%{opacity:1}46%{opacity:.9}47%{opacity:1}70%{opacity:1}71%{opacity:.85}72%{opacity:1}}.br_neon{animation:br_flick 6.0s infinite ease-in-out;animation-delay:-3.35s;will-change:opacity}@media(prefers-reduced-motion:reduce){.br_neon{animation:none}}</style>
+    <defs>
+        <filter id="br_gw" x="-80%" y="-80%" width="260%" height="260%">
+            <feGaussianBlur stdDeviation="6.5" />
+        </filter>
+        <filter id="br_gs" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="2.4" />
+        </filter>
+        <path id="br_p1"
+            d="M46,66 H154 A18,18 0 0 1 172,84 V108 A18,18 0 0 1 154,126 H46 A18,18 0 0 1 28,108 V84 A18,18 0 0 1 46,66 Z" />
+        <path id="br_p2" d="M48,78 L48,114" />
+        <path id="br_p3" d="M48,78 C70,78 70,96 48,96" />
+        <path id="br_p4" d="M48,96 C73,96 73,114 48,114" />
+        <path id="br_p5" d="M85,114 L100,78 L115,114" />
+        <path id="br_p6" d="M91,100 L109,100" />
+        <path id="br_p7" d="M127,114 L127,78" />
+        <path id="br_p8" d="M127,78 C148,78 148,96 127,96" />
+        <path id="br_p9" d="M127,96 L150,114" />
+    </defs>
+    <g class="br_neon">
+        <g filter="url(#br_gw)">
+            <g stroke="#ff2e63" stroke-width="16.0" opacity="0.26" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <use href="#br_p1" />
+                <use href="#br_p2" />
+                <use href="#br_p3" />
+                <use href="#br_p4" />
+                <use href="#br_p5" />
+                <use href="#br_p6" />
+                <use href="#br_p7" />
+                <use href="#br_p8" />
+                <use href="#br_p9" />
+            </g>
+        </g>
+        <g filter="url(#br_gs)">
+            <g stroke="#ff2e63" stroke-width="9.0" opacity="0.5" fill="none" stroke-linecap="round"
+                stroke-linejoin="round">
+                <use href="#br_p1" />
+                <use href="#br_p2" />
+                <use href="#br_p3" />
+                <use href="#br_p4" />
+                <use href="#br_p5" />
+                <use href="#br_p6" />
+                <use href="#br_p7" />
+                <use href="#br_p8" />
+                <use href="#br_p9" />
+            </g>
+        </g>
+        <g stroke="#ff2e63" stroke-width="6.5" fill="none" stroke-linecap="round"
+            stroke-linejoin="round">
+            <use href="#br_p1" />
+            <use href="#br_p2" />
+            <use href="#br_p3" />
+            <use href="#br_p4" />
+            <use href="#br_p5" />
+            <use href="#br_p6" />
+            <use href="#br_p7" />
+            <use href="#br_p8" />
+            <use href="#br_p9" />
+        </g>
+        <g stroke="#ffeef2" stroke-width="2.0" opacity="0.92" fill="none" stroke-linecap="round"
+            stroke-linejoin="round">
+            <use href="#br_p1" />
+            <use href="#br_p2" />
+            <use href="#br_p3" />
+            <use href="#br_p4" />
+            <use href="#br_p5" />
+            <use href="#br_p6" />
+            <use href="#br_p7" />
+            <use href="#br_p8" />
+            <use href="#br_p9" />
+        </g>
+    </g>
+</svg>
