@@ -38,16 +38,20 @@ const spin = () => {
 </script>
 
 <template>
-    <section
-        class="relative grid aspect-5/3 w-full grid-cols-5 overflow-hidden border border-white"
-        ref="display"
+    <div
+        class="-2xl mx-auto my-4 w-full max-w-[80%] overflow-hidden rounded rounded-lg border-3 border-white"
     >
-        <div
-            class="will-change-transform backface-hidden"
-            ref="column"
-            v-for="n in 5"
-        ></div>
-    </section>
+        <section
+            class="relative grid aspect-5/3 w-full grid-cols-5 overflow-hidden border-white"
+            ref="display"
+        >
+            <div
+                class="will-change-transform backface-hidden"
+                ref="column"
+                v-for="n in 5"
+            ></div>
+        </section>
+    </div>
     <div class="grid h-50 grid-cols-[auto_1fr_1fr] grid-rows-[1fr_3fr_2fr]">
         <input
             type="button"

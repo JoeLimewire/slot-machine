@@ -26,6 +26,12 @@ export default class SlotMachine {
     private reels: Reel[] = [];
     private evaluator = new WinEvaluator();
     private canvasController: CanvasController;
+    // One audio instance, reused across spins. Building a new ReelAudio per
+    // spin leaked a full effects chain (reverb + delay) every time; under
+    // repeated jackpot testing those stack up and overload the audio thread,
+    // which is what made the sound cut out. markRaw keeps Vue from proxying
+    // the Tone nodes (same reason the reels are markRaw'd).
+    private audio = markRaw(new ReelAudio());
 
     constructor(
         displayRef: HTMLDivElement,
@@ -57,8 +63,6 @@ export default class SlotMachine {
         this.result = [];
         this.lastWin = 0;
 
-        const audio = new ReelAudio();
-
         try {
             await ReelAudio.unlock();
 
@@ -89,14 +93,13 @@ export default class SlotMachine {
                             this.canvasController.drawLine(win.location);
                             this.score.addScore(win.points * this.bet);
                             this.lastWin += win.points;
-                            audio.playWin(i);
+                            this.audio.playWin(i);
                             i++;
                             waitInterval /= 1.15;
 
                             if (i < wins.length) {
                                 step(); // recurse the inner fn — same promise
                             } else {
-                                console.log("resolved");
                                 resolve(); // the one resolve the caller awaits
                             }
                         }, waitInterval);
@@ -109,7 +112,7 @@ export default class SlotMachine {
             await winLoop();
 
             if (wins.some((w) => w.description == "JACKPOT!")) {
-                audio.playJackpot();
+                this.audio.playJackpot();
                 await this.canvasController.drawJackpot();
             }
         } finally {
