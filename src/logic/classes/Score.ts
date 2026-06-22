@@ -5,31 +5,35 @@ export default class Score {
         this._score = 0;
     }
 
-    get score(): number {
-        return this._score;
+    public get score(): number {
+        return Math.round(this._score);
     }
 
     set score(value: number) {
         this._score = value;
     }
 
-    public addScore(value: number): void {
-        // Add the score incrementally to the current score
-        const time = value <= 3 ? 0 : 1000;
-        const steps = Math.abs(value);
-        const targetScore = this._score + value;
-        const increment = value / steps;
-        const interval = time / steps;
+    private _targetScore = 0;
+    private _intervalId: ReturnType<typeof setInterval> | null = null;
 
-        let currentStep = 0;
-        const intervalId = setInterval(() => {
-            this._score += increment;
-            currentStep++;
-            if (currentStep >= steps) {
-                clearInterval(intervalId);
-                this._score = Math.round(targetScore);
+    public addScore(value: number): void {
+        this._targetScore += value;
+
+        if (this._intervalId !== null) return;
+
+        const tickMs = 16;
+        this._intervalId = setInterval(() => {
+            const remaining = this._targetScore - this._score;
+
+            if (Math.abs(remaining) < 0.5) {
+                this._score = this._targetScore;
+                clearInterval(this._intervalId!);
+                this._intervalId = null;
+                return;
             }
-        }, interval);
+
+            this._score += remaining * 0.08;
+        }, tickMs);
     }
 
     public resetScore(): void {

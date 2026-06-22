@@ -6,8 +6,10 @@ import WinEvaluator from "./WinEvaluator.ts";
 import {
     WEIGHTED_SYMBOLS,
     REELS,
+    ROWS,
     STRIP_REPEATS,
     SPIN_STAGGER_MS,
+    WIN_ANIM,
     type ReelSymbol,
 } from "../config.ts";
 
@@ -22,6 +24,7 @@ export default class SlotMachine {
 
     private reels: Reel[] = [];
     private evaluator = new WinEvaluator();
+    private canvas: HTMLCanvasElement;
 
     constructor(
         displayRef: HTMLDivElement,
@@ -31,10 +34,12 @@ export default class SlotMachine {
         const symbols = this.loadSymbols();
         const iconHeight = displayRef.clientWidth / REELS;
 
-        // markRaw: keep Vue from making the reels (and their Tone audio nodes)
-        // reactive. Tone uses #private fields that throw when accessed through a
-        // reactive Proxy. SlotMachine itself stays reactive so isSpinning/score/
-        // result still drive the template.
+        const canvas = document.createElement("canvas");
+        canvas.style.cssText =
+            "position:absolute;inset:0;width:100%;height:100%;pointer-events:none;";
+        displayRef.appendChild(canvas);
+        this.canvas = canvas;
+
         this.reels = displayColumns.map((col) =>
             markRaw(
                 new Reel(col, iconHeight, symbols.length, STRIP_REPEATS, () =>
@@ -46,12 +51,20 @@ export default class SlotMachine {
 
     async spin(): Promise<void> {
         if (this.isSpinning) return;
+
+        this.score.addScore(-1);
+
         this.isSpinning = true;
         this.result = [];
         this.lastWin = 0;
 
+        const audio = new ReelAudio();
+
         try {
             await ReelAudio.unlock();
+
+            const ctx = this.canvas.getContext("2d")!;
+            ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
             // Fresh symbols off-screen before anything moves.
             this.reels.forEach((reel) => reel.reshuffleHidden());
@@ -64,12 +77,39 @@ export default class SlotMachine {
             );
 
             this.result = grid;
+            let waitInterval = WIN_ANIM;
 
-            for (const win of this.evaluator.evaluate(grid)) {
-                console.log(win.description);
-                this.score.addScore(win.points);
-                this.lastWin += win.points;
-            }
+            const wins = this.evaluator.evaluate(grid);
+            let i = 0;
+
+            const winLoop = (): Promise<void> => {
+                return new Promise((resolve) => {
+                    const step = () => {
+                        setTimeout(() => {
+                            const win = wins[i];
+                            this.drawLine(win.location);
+                            this.score.addScore(win.points);
+                            this.lastWin += win.points;
+                            audio.playWin(i);
+                            i++;
+                            waitInterval /= 1.15;
+
+                            if (i < wins.length) {
+                                step(); // recurse the inner fn — same promise
+                            } else {
+                                console.log("resolved");
+                                resolve(); // the one resolve the caller awaits
+                            }
+                        }, waitInterval);
+                    };
+
+                    step(); // kick it off
+                });
+            };
+
+            await winLoop();
+
+            audio.playJackpot();
         } finally {
             // Always re-enable the button, even if a spin throws.
             this.isSpinning = false;
@@ -77,18 +117,48 @@ export default class SlotMachine {
     }
 
     private loadSymbols(): ReelSymbol[] {
-        // Baked raster sprites (glow rendered in) — the live feGaussianBlur SVGs
-        // were too expensive to re-rasterise per frame. The neon flicker those
-        // SVGs had is re-created with a CSS opacity animation (see .reel-icon in
-        // style.css). Regenerate with: npm run bake-symbols
         const modules = import.meta.glob("../../assets/symbols-baked/*.webp", {
             eager: true,
             import: "default",
         });
-        return Object.values(modules).map((src) => ({
+
+        const images = Object.values(modules).map((src) => ({
             src: src as string,
             title: (src as string).split("/").pop()?.split(".")[0] ?? "",
         }));
+        return images;
+    }
+
+    drawLine(location: {
+        start: [x: number, y: number];
+        end: [x: number, y: number];
+    }) {
+        const ctx = this.canvas.getContext("2d")!;
+        const W = this.canvas.offsetWidth;
+        const H = this.canvas.offsetHeight;
+        this.canvas.width = W;
+        this.canvas.height = H;
+
+        const cellW = W / REELS;
+        const cellH = H / ROWS;
+
+        const toPixel = ([col, row]: [number, number]) =>
+            [(col + 0.5) * cellW, (row + 0.5) * cellH] as const;
+
+        const [sx, sy] = toPixel(location.start);
+        const [ex, ey] = toPixel(location.end);
+
+        const neon = `hsl(${Math.floor(Math.random() * 360)}, 100%, 60%)`;
+
+        ctx.beginPath();
+        ctx.moveTo(sx, sy);
+        ctx.lineTo(ex, ey);
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 8;
+        ctx.lineCap = "round";
+        ctx.shadowColor = neon;
+        ctx.shadowBlur = 15;
+        ctx.stroke();
     }
 
     // Weighted selection with replacement, by WEIGHTED_SYMBOLS.

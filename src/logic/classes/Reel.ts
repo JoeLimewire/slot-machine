@@ -37,14 +37,16 @@ export default class Reel {
             }
         }
         // Random, icon-aligned starting offset.
-        const start = Math.floor(Math.random() * this.symbolCount) * this.iconHeight;
+        const start =
+            Math.floor(Math.random() * this.symbolCount) * this.iconHeight;
         this.element.style.transform = `translateY(-${start}px)`;
     }
 
     private makeIcon(sym: ReelSymbol): HTMLImageElement {
         const img = document.createElement("img");
         img.src = sym.src;
-        img.classList.add("aspect-1/1", "w-full", "reel-icon");
+        img.classList.add("aspect-1/1", "w-full", "flicker");
+
         // Random phase so the neon icons don't flicker in unison.
         img.style.animationDelay = `${-Math.random() * 5.52}s`;
         return img;
@@ -87,21 +89,34 @@ export default class Reel {
                 { transform: `translateY(${startY}px)` },
                 { transform: `translateY(${endY}px)` },
             ],
-            { duration, easing: "cubic-bezier(.6,-0.15,.2,1.05)", fill: "forwards" },
+            {
+                duration,
+                easing: "cubic-bezier(.6,-0.15,.2,1.05)",
+                fill: "forwards",
+            },
         );
 
-        this.trackCrossing(startY, endY, anim, (i) => this.audio.playCrossing(i));
+        this.trackCrossing(startY, endY, anim, (i) =>
+            this.audio.playCrossing(i),
+        );
 
         return new Promise((resolve) => {
-            setTimeout(() => {
-                const imgIndex = Math.round(Math.abs((endY / ih) % this.symbolCount) + 1);
-                const visible = this.symbols.slice(imgIndex - 1, imgIndex - 1 + ROWS);
+            anim.onfinish = () => {
+                // Set inline style before canceling to prevent a flash back to the pre-animation position.
+                this.element.style.transform = `translateY(${endY}px)`;
+                // Cancel the fill so inline style takes cascade precedence over the animation.
+                anim.cancel();
 
-                this.element.style.transition = "transform 0ms";
-                this.element.style.transform = `translateY(${(imgIndex - 1) * ih * -1}px)`;
+                const totalIcons = this.symbolCount * this.repeats;
+                const topIdx = Math.round(Math.abs(endY) / ih) % totalIcons;
+
+                const visible = this.symbols.slice(topIdx, topIdx + ROWS);
+                this.element.style.transform = `translateY(${-topIdx * ih}px)`;
+
+                // console.log("[Reel] topIdx:", topIdx, "visible:", visible);
 
                 resolve(visible);
-            }, duration);
+            };
         });
     }
 
@@ -118,7 +133,9 @@ export default class Reel {
             if (progress == null) return;
 
             const currentY = startY - progress * (startY - endY);
-            const idx = Math.floor(Math.abs(currentY) / this.iconHeight) % this.symbolCount;
+            const idx =
+                Math.floor(Math.abs(currentY) / this.iconHeight) %
+                this.symbolCount;
             if (idx !== last) {
                 last = idx;
                 onCross(idx);

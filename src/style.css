@@ -68,12 +68,12 @@ body {
   71% { opacity: 0.85; }
 }
 
-.reel-icon {
+.flicker {
   animation: sv_flick 5.52s infinite ease-in-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reel-icon {
+  .flicker {
     animation: none;
   }
 }
@@ -319,15 +319,57 @@ code {
   }
 }
 
+/* glows */
+/* ── Colour tokens: set the glow colour as RGB channels ───────────── */
+.glow-amber { --glow: 251, 191, 36; }
+.glow-green { --glow: 74, 222, 128; }
+.glow-blue  { --glow: 96, 165, 250; }
+.glow-red   { --glow: 248, 113, 113; }   /* add colours freely */
+
+/* ── Effects: read --glow, apply nothing colour-specific ──────────── */
+.glow-text {
+  color: white;
+  text-shadow:
+    0 0 5px  rgba(var(--glow), 0.8),
+    0 0 10px rgba(var(--glow), 0.8),
+    0 0 20px rgba(var(--glow), 1);
+}
+
+.glow-box {
+  box-shadow:
+    0 0 10px rgba(var(--glow), 0.6),
+    0 0 20px rgba(var(--glow), 0.4),
+    inset 0 0 10px rgba(var(--glow), 0.3);
+}
+
+.glow-border {
+  border: 2px solid white;
+}
+
+.glow-box-strong {
+  box-shadow:
+    0 0 15px rgba(var(--glow), 0.8),
+    inset 0 0 15px rgba(var(--glow), 0.4);
+}
+
+.digital {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 1;
+}
+
+
 .neonderthaw-regular {
   font-family: "Neonderthaw", cursive;
   font-weight: 400;
   font-style: normal;
 }
 
-.monoton-regular {
-  font-family: "Monoton", sans-serif;
+
+.major-mono-display-regular {
+  font-family: "Major Mono Display", monospace;
   font-weight: 400;
   font-style: normal;
 }
+
 
