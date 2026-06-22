@@ -65,11 +65,9 @@ watch(
         :class="{ 'bet-shake': shake }"
         @animationend="shake = false"
     >
-        <div>
-            <p class="digital glow-text text-2xl">
-                <span class="flicker">bet</span>
-            </p>
-        </div>
+        <p class="glow-text text-center text-2xl">
+            <span class="flicker">bet</span>
+        </p>
 
         <div class="flex flex-row">
             <button

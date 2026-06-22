@@ -62,14 +62,13 @@ body {
    here as a cheap opacity animation (compositor-friendly, no repaint of the
    glow). Keyframes match the original sv_flick. */
 @keyframes sv_flick {
-  0%, 43%, 45%, 47%, 70%, 72%, 100% { opacity: 1; }
-  44% { opacity: 0.74; }
-  46% { opacity: 0.9; }
-  71% { opacity: 0.85; }
+  0%, 19.3%, 19.6%, 20.0%, 31.5%, 31.8%, 100% { opacity: 1; }
+  19.45% { opacity: 0.74; }
+  19.8%  { opacity: 0.9; }
+  31.65% { opacity: 0.85; }
 }
-
 .flicker {
-  animation: sv_flick 5.52s infinite ease-in-out;
+  animation: sv_flick 12s infinite ease-in-out;
 }
 
 @media (prefers-reduced-motion: reduce) {

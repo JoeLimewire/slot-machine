@@ -3,10 +3,10 @@ import Score from "./Score.ts";
 import Reel from "./Reel.ts";
 import ReelAudio from "./ReelAudio.ts";
 import WinEvaluator from "./WinEvaluator.ts";
+import CanvasController from "./CanvasController.ts";
 import {
     WEIGHTED_SYMBOLS,
     REELS,
-    ROWS,
     STRIP_REPEATS,
     SPIN_STAGGER_MS,
     WIN_ANIM,
@@ -25,7 +25,7 @@ export default class SlotMachine {
 
     private reels: Reel[] = [];
     private evaluator = new WinEvaluator();
-    private canvas: HTMLCanvasElement;
+    private canvasController: CanvasController;
 
     constructor(
         displayRef: HTMLDivElement,
@@ -35,11 +35,7 @@ export default class SlotMachine {
         const symbols = this.loadSymbols();
         const iconHeight = displayRef.clientWidth / REELS;
 
-        const canvas = document.createElement("canvas");
-        canvas.style.cssText =
-            "position:absolute;inset:0;width:100%;height:100%;pointer-events:none;";
-        displayRef.appendChild(canvas);
-        this.canvas = canvas;
+        this.canvasController = new CanvasController(displayRef);
 
         this.reels = displayColumns.map((col) =>
             markRaw(
@@ -66,8 +62,7 @@ export default class SlotMachine {
         try {
             await ReelAudio.unlock();
 
-            const ctx = this.canvas.getContext("2d")!;
-            ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.canvasController.clear();
 
             // Fresh symbols off-screen before anything moves.
             this.reels.forEach((reel) => reel.reshuffleHidden());
@@ -91,7 +86,7 @@ export default class SlotMachine {
                         setTimeout(() => {
                             if (wins.length <= 0) resolve();
                             const win = wins[i];
-                            this.drawLine(win.location);
+                            this.canvasController.drawLine(win.location);
                             this.score.addScore(win.points * this.bet);
                             this.lastWin += win.points;
                             audio.playWin(i);
@@ -107,13 +102,16 @@ export default class SlotMachine {
                         }, waitInterval);
                     };
 
-                    step(); // kick it off
+                    step();
                 });
             };
 
             await winLoop();
 
-            // audio.playJackpot();
+            if (wins.some((w) => w.description == "JACKPOT!")) {
+                audio.playJackpot();
+                await this.canvasController.drawJackpot();
+            }
         } finally {
             // Always re-enable the button, even if a spin throws.
             this.isSpinning = false;
@@ -131,38 +129,6 @@ export default class SlotMachine {
             title: (src as string).split("/").pop()?.split(".")[0] ?? "",
         }));
         return images;
-    }
-
-    drawLine(location: {
-        start: [x: number, y: number];
-        end: [x: number, y: number];
-    }) {
-        const ctx = this.canvas.getContext("2d")!;
-        const W = this.canvas.offsetWidth;
-        const H = this.canvas.offsetHeight;
-        this.canvas.width = W;
-        this.canvas.height = H;
-
-        const cellW = W / REELS;
-        const cellH = H / ROWS;
-
-        const toPixel = ([col, row]: [number, number]) =>
-            [(col + 0.5) * cellW, (row + 0.5) * cellH] as const;
-
-        const [sx, sy] = toPixel(location.start);
-        const [ex, ey] = toPixel(location.end);
-
-        const neon = `hsl(${Math.floor(Math.random() * 360)}, 100%, 60%)`;
-
-        ctx.beginPath();
-        ctx.moveTo(sx, sy);
-        ctx.lineTo(ex, ey);
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 8;
-        ctx.lineCap = "round";
-        ctx.shadowColor = neon;
-        ctx.shadowBlur = 15;
-        ctx.stroke();
     }
 
     // Weighted selection with replacement, by WEIGHTED_SYMBOLS.

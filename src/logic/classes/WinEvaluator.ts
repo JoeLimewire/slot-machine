@@ -2,7 +2,7 @@ import { SYMBOL_SCORES, ROWS } from "../config.ts";
 
 export type Win = {
     type: "vertical" | "horizontal" | "diagonal";
-    location: {start: [x: number, y:number], end: [x: number, y:number]};
+    location: { start: [x: number, y: number]; end: [x: number, y: number] };
     description: string;
     points: number;
 };
@@ -24,7 +24,7 @@ export default class WinEvaluator {
                 const symbol = col[0];
                 wins.push({
                     type: "vertical",
-                    location: {start: [i, 0], end:[i, 2]},
+                    location: { start: [i, 0], end: [i, 2] },
                     description: `Vertical win on column ${i + 1}: ${col.join(" ")}`,
                     points: scoreFor(symbol),
                 });
@@ -37,12 +37,14 @@ export default class WinEvaluator {
                 const c = grid[i + 2];
 
                 // Horizontal across the middle row.
-                 for (const r of row_arr) {
+                for (const r of row_arr) {
                     if (a[r] === b[r] && b[r] === c[r]) {
                         wins.push({
                             type: "horizontal",
-                            location: { start: [i, r], end: [i + 2, r] },                                                                                                                                              description: `Horizontal win on row ${r + 1}: ${a[r]} ${b[r]} ${c[r]}`,
-                            points: scoreFor(a[r]),                                                                                                                                                               });
+                            location: { start: [i, r], end: [i + 2, r] },
+                            description: `Horizontal win on row ${r + 1}: ${a[r]} ${b[r]} ${c[r]}`,
+                            points: scoreFor(a[r]),
+                        });
                     }
                 }
 
@@ -51,7 +53,7 @@ export default class WinEvaluator {
                     const symbol = a[0];
                     wins.push({
                         type: "diagonal",
-                        location: {start: [i, 0], end: [i+2,2]},
+                        location: { start: [i, 0], end: [i + 2, 2] },
                         description: `Diagonal win (\\) starting at column ${i + 1}: ${a[0]} ${b[1]} ${c[2]}`,
                         points: scoreFor(symbol),
                     });
@@ -62,12 +64,30 @@ export default class WinEvaluator {
                     const symbol = a[2];
                     wins.push({
                         type: "diagonal",
-                        location: {start: [i, 2], end: [i+2,0]},
+                        location: { start: [i, 2], end: [i + 2, 0] },
                         description: `Diagonal win (/) starting at column ${i + 1}: ${a[2]} ${b[1]} ${c[0]}`,
                         points: scoreFor(symbol),
                     });
                 }
             }
+        }
+
+        //Resolve jackpot
+        const firstSymbol = grid[0][0];
+        const isJackpot = grid.every((col) =>
+            col.every((cell) => cell === firstSymbol),
+        );
+
+        if (isJackpot) {
+            wins.push({
+                type: "jackpot",
+                location: {
+                    start: [0, 0],
+                    end: [grid.length - 1, ROWS - 1],
+                },
+                description: `JACKPOT!`,
+                points: scoreFor(firstSymbol) * grid.length * ROWS,
+            });
         }
 
         return wins;

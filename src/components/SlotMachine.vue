@@ -69,19 +69,4 @@ const spin = () => {
             :bet="slotMachine?.bet ?? 0"
         />
     </div>
-    <div class="flex h-50 flex-row">
-        <input
-            type="button"
-            @click="spin"
-            value="Chances"
-            class="neonderthaw-regular flicker glow-button glow-red glow-text glow-box glow-border flex-1 text-6xl"
-        />
-
-        <input
-            type="button"
-            @click="spin"
-            value="Shop"
-            class="neonderthaw-regular flicker glow-button glow-purple glow-text glow-box glow-border flex-1 text-6xl"
-        />
-    </div>
 </template>

@@ -4,7 +4,7 @@ import { ROWS, SPIN, type ReelSymbol } from "../config.ts";
 // A single column. Owns its DOM strip, its symbol model (the source of truth),
 // its spin animation, and its own audio voice.
 export default class Reel {
-    private symbols: string[] = []; // title at each strip position (parallels the DOM children)
+    private symbols: string[] = [];
     private audio = new ReelAudio();
 
     private element: HTMLDivElement;
