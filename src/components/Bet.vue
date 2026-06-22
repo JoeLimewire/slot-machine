@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 
 const props = withDefaults(defineProps<{ max?: number; step?: number }>(), {
     max: 100,
@@ -8,6 +8,19 @@ const props = withDefaults(defineProps<{ max?: number; step?: number }>(), {
 
 const bet = defineModel<number>({ default: 1 });
 const shake = ref(false);
+
+const betString = computed(() => {
+    const v = bet.value;
+    if (v >= 1_000_000) return v.toExponential(1);
+    return v.toString().padStart(4, "0");
+});
+
+const betFontClass = computed(() => {
+    const len = betString.value.length;
+    if (len <= 6) return "text-7xl";
+    if (len <= 8) return "text-6xl";
+    return "text-2xl";
+});
 
 function bump() {
     shake.value = true;
@@ -31,7 +44,7 @@ function maxBet() {
 }
 
 function halfBet() {
-    bet.value = props.max / 2;
+    bet.value = Math.floor(props.max / 2);
 }
 
 function minBet() {
@@ -48,14 +61,12 @@ watch(
 
 <template>
     <div
-        class="flicker bet-container glow-green glow-border glow-box major-mono-display-regular bet-grid"
+        class="flicker glow-green glow-border glow-box major-mono-display-regular panel-grid"
         :class="{ 'bet-shake': shake }"
         @animationend="shake = false"
     >
         <div>
-            <p
-                class="digital glow-text border text-2xl transition-all duration-300"
-            >
+            <p class="digital glow-text text-2xl">
                 <span class="flicker">bet</span>
             </p>
         </div>
@@ -70,9 +81,10 @@ watch(
             </button>
 
             <div
-                class="digital glow-text bet-value flex flex-col items-center justify-evenly text-6xl"
+                class="digital glow-text bet-value flex flex-col items-center justify-evenly"
+                :class="betFontClass"
             >
-                <span>{{ bet.toString().padStart(3, "0") }}</span>
+                <span>{{ betString }}</span>
             </div>
 
             <button
@@ -112,12 +124,6 @@ watch(
 </template>
 
 <style>
-.bet-grid {
-    display: grid;
-    grid-template-columns: 1;
-    grid-template-rows: 1fr 3fr 2fr;
-}
-
 /* the presets row spans all three columns */
 .bet-presets {
     grid-column: 1 / -1; /* from first line to last → full width */
@@ -139,26 +145,6 @@ watch(
     font-weight: 700;
     cursor: pointer;
     transition: all 300ms;
-}
-
-.glow-button {
-    height: 100%;
-    width: 100%;
-    cursor: pointer;
-    transition: all 300ms;
-    display: flex;
-    align-items: center;
-    align-content: center;
-    align-self: center;
-    justify-content: center;
-}
-
-/* fill-and-invert on hover, matching the spin button */
-.glow-button:hover {
-    background-color: white;
-    color: #111;
-    text-shadow: none;
-    box-shadow: 0 0 30px rgba(var(--glow), 0.8);
 }
 
 @keyframes bet-flicker {

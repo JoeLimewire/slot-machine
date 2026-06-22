@@ -20,6 +20,7 @@ export default class SlotMachine {
     score = new Score();
     isSpinning = false;
     result: string[][] = [];
+    bet = 0;
     lastWin = 0; // points awarded by the most recent spin
 
     private reels: Reel[] = [];
@@ -49,10 +50,12 @@ export default class SlotMachine {
         );
     }
 
-    async spin(): Promise<void> {
+    async spin(bet: number): Promise<void> {
         if (this.isSpinning) return;
 
-        this.score.addScore(-1);
+        // Remove bet from score
+        this.score.addScore(bet * -1);
+        this.bet = bet;
 
         this.isSpinning = true;
         this.result = [];
@@ -86,9 +89,10 @@ export default class SlotMachine {
                 return new Promise((resolve) => {
                     const step = () => {
                         setTimeout(() => {
+                            if (wins.length <= 0) resolve();
                             const win = wins[i];
                             this.drawLine(win.location);
-                            this.score.addScore(win.points);
+                            this.score.addScore(win.points * this.bet);
                             this.lastWin += win.points;
                             audio.playWin(i);
                             i++;
@@ -109,7 +113,7 @@ export default class SlotMachine {
 
             await winLoop();
 
-            audio.playJackpot();
+            // audio.playJackpot();
         } finally {
             // Always re-enable the button, even if a spin throws.
             this.isSpinning = false;

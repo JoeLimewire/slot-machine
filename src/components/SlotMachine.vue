@@ -9,6 +9,7 @@ const displayRef = useTemplateRef("display");
 const displayColumns = useTemplateRef("column");
 const resultRef = useTemplateRef("result");
 const slotMachine = ref<SlotMachine | null>(null);
+const currentBet = ref<number>(1);
 
 onMounted(() => {
     slotMachine.value = new SlotMachine(
@@ -16,6 +17,7 @@ onMounted(() => {
         displayColumns.value,
         resultRef.value,
     );
+
     slotMachine.value.score.addScore(10);
 
     document.addEventListener("keypress", (k) => {
@@ -31,7 +33,7 @@ onMounted(() => {
 });
 
 const spin = () => {
-    slotMachine.value.spin();
+    slotMachine.value.spin(currentBet.value);
 };
 </script>
 
@@ -41,24 +43,45 @@ const spin = () => {
         ref="display"
     >
         <div
-            class="inset-shadow-indigo-500 will-change-transform backface-hidden"
+            class="will-change-transform backface-hidden"
             ref="column"
             v-for="n in 5"
         ></div>
     </section>
-    <div class="flex h-50 flex-row">
+    <div class="grid h-50 grid-cols-[auto_1fr_1fr] grid-rows-[1fr_3fr_2fr]">
         <input
             type="button"
             @click="spin"
             value="Spin"
             :disabled="slotMachine?.isSpinning ?? false"
-            class="neonderthaw-regular flicker aspect-1/1 h-full cursor-pointer border-2 border-cyan-400 bg-transparent px-8 py-3 text-6xl font-bold text-white shadow-[0_0_15px_rgba(34,211,238,0.5)] transition-all duration-300 text-shadow-[0_0_15px_rgba(34,211,238,1)] text-shadow-cyan-400 hover:bg-cyan-100 hover:text-gray-900 hover:shadow-[0_0_30px_rgba(34,211,238,0.8)] hover:text-shadow-none disabled:pointer-events-none disabled:cursor-default disabled:opacity-50 disabled:shadow-none disabled:grayscale disabled:text-shadow-none disabled:hover:bg-transparent disabled:hover:text-cyan-400 disabled:hover:shadow-none"
+            class="neonderthaw-regular flicker row-span-3 aspect-1/1 h-full cursor-pointer border-2 border-cyan-400 bg-transparent px-8 py-3 text-6xl font-bold text-white shadow-[0_0_15px_rgba(34,211,238,0.5)] transition-all duration-300 text-shadow-[0_0_15px_rgba(34,211,238,1)] text-shadow-cyan-400 hover:bg-cyan-100 hover:text-gray-900 hover:shadow-[0_0_30px_rgba(34,211,238,0.8)] hover:text-shadow-none disabled:pointer-events-none disabled:cursor-default disabled:opacity-50 disabled:shadow-none disabled:grayscale disabled:text-shadow-none disabled:hover:bg-transparent disabled:hover:text-cyan-400 disabled:hover:shadow-none"
         />
 
-        <Bet :max="slotMachine?.score.score" />
+        <Bet
+            class="row-span-3"
+            v-model="currentBet"
+            :max="slotMachine?.score.score"
+        />
         <Scoreboard
+            class="row-span-3"
             :score="slotMachine?.score.score ?? 0"
             :lastWin="slotMachine?.lastWin ?? 0"
+            :bet="slotMachine?.bet ?? 0"
+        />
+    </div>
+    <div class="flex h-50 flex-row">
+        <input
+            type="button"
+            @click="spin"
+            value="Chances"
+            class="neonderthaw-regular flicker glow-button glow-red glow-text glow-box glow-border flex-1 text-6xl"
+        />
+
+        <input
+            type="button"
+            @click="spin"
+            value="Shop"
+            class="neonderthaw-regular flicker glow-button glow-purple glow-text glow-box glow-border flex-1 text-6xl"
         />
     </div>
 </template>
