@@ -1,5 +1,5 @@
 interface Observer {
-    
+    update: () => {};
 }
 
-export default Observer; 
+export default Observer;

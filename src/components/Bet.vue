@@ -17,9 +17,9 @@ const betString = computed(() => {
 
 const betFontClass = computed(() => {
     const len = betString.value.length;
-    if (len <= 6) return "text-7xl";
-    if (len <= 8) return "text-6xl";
-    return "text-2xl";
+    if (len <= 6) return "text-6xl lg:text-7xl";
+    if (len <= 8) return "text-5xl lg:text-6xl";
+    return "text-xl lg:text-2xl";
 });
 
 function bump() {
@@ -61,7 +61,7 @@ watch(
 
 <template>
     <div
-        class="flicker glow-green glow-border glow-box major-mono-display-regular panel-grid"
+        class="flicker glow-green glow-border glow-box major-mono-display-regular flex flex-col gap-2 pt-4"
         :class="{ 'bet-shake': shake }"
         @animationend="shake = false"
     >

@@ -4,12 +4,15 @@ import Reel from "./Reel.ts";
 import ReelAudio from "./ReelAudio.ts";
 import WinEvaluator from "./WinEvaluator.ts";
 import CanvasController from "./CanvasController.ts";
+import type Inventory from "./Inventory.ts";
 import {
     WEIGHTED_SYMBOLS,
+    SYMBOL_SCORES,
     REELS,
     STRIP_REPEATS,
     SPIN_STAGGER_MS,
     WIN_ANIM,
+    type WeightedIcon,
     type ReelSymbol,
 } from "../config.ts";
 
@@ -22,6 +25,7 @@ export default class SlotMachine {
     result: string[][] = [];
     bet = 0;
     lastWin = 0; // points awarded by the most recent spin
+    symbols: ReelSymbol[] = [];
 
     private reels: Reel[] = [];
     private evaluator = new WinEvaluator();
@@ -32,21 +36,25 @@ export default class SlotMachine {
     // which is what made the sound cut out. markRaw keeps Vue from proxying
     // the Tone nodes (same reason the reels are markRaw'd).
     private audio = markRaw(new ReelAudio());
+    private currentWeights: WeightedIcon[] = WEIGHTED_SYMBOLS;
+    private inventory?: Inventory;
 
     constructor(
         displayRef: HTMLDivElement,
         displayColumns: HTMLDivElement[],
         _resultRef: HTMLDivElement,
+        inventory?: Inventory,
     ) {
-        const symbols = this.loadSymbols();
+        this.inventory = inventory;
+        this.symbols = this.loadSymbols();
         const iconHeight = displayRef.clientWidth / REELS;
 
         this.canvasController = new CanvasController(displayRef);
 
         this.reels = displayColumns.map((col) =>
             markRaw(
-                new Reel(col, iconHeight, symbols.length, STRIP_REPEATS, () =>
-                    this.pickWeighted(symbols),
+                new Reel(col, iconHeight, this.symbols.length, STRIP_REPEATS, () =>
+                    this.pickWeighted(this.symbols),
                 ),
             ),
         );
@@ -68,6 +76,11 @@ export default class SlotMachine {
 
             this.canvasController.clear();
 
+            // Apply inventory weight modifiers before each spin.
+            this.currentWeights =
+                this.inventory?.getEffectiveWeights(WEIGHTED_SYMBOLS) ??
+                WEIGHTED_SYMBOLS;
+
             // Fresh symbols off-screen before anything moves.
             this.reels.forEach((reel) => reel.reshuffleHidden());
 
@@ -81,7 +94,9 @@ export default class SlotMachine {
             this.result = grid;
             let waitInterval = WIN_ANIM;
 
-            const wins = this.evaluator.evaluate(grid);
+            const effectiveScores =
+                this.inventory?.getEffectiveScores(SYMBOL_SCORES) ?? SYMBOL_SCORES;
+            const wins = this.evaluator.evaluate(grid, effectiveScores);
             let i = 0;
 
             const winLoop = (): Promise<void> => {
@@ -111,13 +126,17 @@ export default class SlotMachine {
 
             await winLoop();
 
-            if (wins.some((w) => w.description == "JACKPOT!")) {
+            const wasJackpot = wins.some((w) => w.description === "JACKPOT!");
+
+            if (wasJackpot) {
                 this.audio.playJackpot();
                 await this.canvasController.drawJackpot();
             }
+
         } finally {
             // Always re-enable the button, even if a spin throws.
             this.isSpinning = false;
+            this.inventory?.onSpinComplete();
         }
     }
 
@@ -134,10 +153,10 @@ export default class SlotMachine {
         return images;
     }
 
-    // Weighted selection with replacement, by WEIGHTED_SYMBOLS.
+    // Weighted selection with replacement, using currentWeights (set before each spin).
     private pickWeighted(symbols: ReelSymbol[]): ReelSymbol {
         const weightOf = (title: string) =>
-            WEIGHTED_SYMBOLS.find((w) => w.title === title)?.weight ?? 0;
+            this.currentWeights.find((w) => w.title === title)?.weight ?? 0;
         const total = symbols.reduce((sum, s) => sum + weightOf(s.title), 0);
 
         let r = Math.random() * total;

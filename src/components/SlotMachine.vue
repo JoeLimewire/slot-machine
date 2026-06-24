@@ -1,21 +1,30 @@
 <script setup lang="ts">
 import { onMounted, useTemplateRef, ref } from "vue";
-import SlotMachine from "../logic/classes/SlotMachine.ts";
+import SlotMachineClass from "../logic/classes/SlotMachine.ts";
+import Inventory from "../logic/classes/Inventory.ts";
 import ReelAudio from "../logic/classes/ReelAudio.ts";
+import type { TypeItem } from "../logic/classes/collections/items.ts";
 import Bet from "./Bet.vue";
 import Scoreboard from "./Scoreboard.vue";
+import Shop from "./Shop.vue";
+import Chances from "./Chances.vue";
+import Modal from "./Modal.vue";
 
 const displayRef = useTemplateRef("display");
 const displayColumns = useTemplateRef("column");
-const resultRef = useTemplateRef("result");
-const slotMachine = ref<SlotMachine | null>(null);
+const slotMachine = ref<SlotMachineClass | null>(null);
 const currentBet = ref<number>(1);
+const showShop = ref(false);
+const showChances = ref(false);
+
+const inventory = new Inventory();
 
 onMounted(() => {
-    slotMachine.value = new SlotMachine(
+    slotMachine.value = new SlotMachineClass(
         displayRef.value,
         displayColumns.value,
-        resultRef.value,
+        null,
+        inventory,
     );
 
     slotMachine.value.score.addScore(10);
@@ -35,6 +44,23 @@ onMounted(() => {
 const spin = () => {
     slotMachine.value.spin(currentBet.value);
 };
+
+const handlePurchase = ({
+    item,
+    selectedIcon,
+}: {
+    item: TypeItem;
+    selectedIcon?: string;
+}) => {
+    if (!slotMachine.value) return;
+    slotMachine.value.score.addScore(-item.cost);
+    inventory.add(item, { selectedIcon });
+};
+
+defineExpose({
+    openShop: () => (showShop.value = true),
+    openChances: () => (showChances.value = true),
+});
 </script>
 
 <template>
@@ -52,13 +78,15 @@ const spin = () => {
             ></div>
         </section>
     </div>
-    <div class="grid h-50 grid-cols-[auto_1fr_1fr] grid-rows-[1fr_3fr_2fr]">
+    <div
+        class="flex grid flex-col lg:grid-cols-[auto_1fr_1fr] lg:grid-rows-[1fr_3fr_2fr]"
+    >
         <input
             type="button"
             @click="spin"
             value="Spin"
             :disabled="slotMachine?.isSpinning ?? false"
-            class="neonderthaw-regular flicker row-span-3 aspect-1/1 h-full cursor-pointer border-2 border-cyan-400 bg-transparent px-8 py-3 text-6xl font-bold text-white shadow-[0_0_15px_rgba(34,211,238,0.5)] transition-all duration-300 text-shadow-[0_0_15px_rgba(34,211,238,1)] text-shadow-cyan-400 hover:bg-cyan-100 hover:text-gray-900 hover:shadow-[0_0_30px_rgba(34,211,238,0.8)] hover:text-shadow-none disabled:pointer-events-none disabled:cursor-default disabled:opacity-50 disabled:shadow-none disabled:grayscale disabled:text-shadow-none disabled:hover:bg-transparent disabled:hover:text-cyan-400 disabled:hover:shadow-none"
+            class="neonderthaw-regular flicker row-span-3 h-full cursor-pointer border-2 border-cyan-400 bg-transparent px-8 py-3 text-6xl font-bold text-white shadow-[0_0_15px_rgba(34,211,238,0.5)] transition-all duration-300 text-shadow-[0_0_15px_rgba(34,211,238,1)] text-shadow-cyan-400 hover:bg-cyan-100 hover:text-gray-900 hover:shadow-[0_0_30px_rgba(34,211,238,0.8)] hover:text-shadow-none disabled:pointer-events-none disabled:cursor-default disabled:opacity-50 disabled:shadow-none disabled:grayscale disabled:text-shadow-none disabled:hover:bg-transparent disabled:hover:text-cyan-400 disabled:hover:shadow-none lg:aspect-1/1"
         />
 
         <Bet
@@ -73,4 +101,25 @@ const spin = () => {
             :bet="slotMachine?.bet ?? 0"
         />
     </div>
+
+    <Modal
+        v-model="showShop"
+        title="shop"
+        glow-class="glow-purple neonderthaw-regular"
+    >
+        <Shop
+            :inventory="inventory"
+            :score="slotMachine?.score.score ?? 0"
+            :symbols="slotMachine?.symbols ?? []"
+            @purchase="handlePurchase"
+        />
+    </Modal>
+
+    <Modal
+        v-model="showChances"
+        title="chances"
+        glow-class="glow-red neonderthaw-regular"
+    >
+        <Chances :inventory="inventory" />
+    </Modal>
 </template>

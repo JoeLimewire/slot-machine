@@ -20,9 +20,9 @@ const scoreString = computed(() => {
 
 const scoreFontClass = computed(() => {
     const len = scoreString.value.length;
-    if (len <= 6) return "text-7xl";
-    if (len <= 8) return "text-6xl";
-    return "text-2xl";
+    if (len <= 6) return "text-6xl lg:text-7xl";
+    if (len <= 8) return "text-5xl lg:text-6xl";
+    return "text-xl lg:text-2xl";
 });
 
 const equationString = computed(
@@ -41,7 +41,7 @@ const equationFontClass = computed(() => {
 
 <template>
     <div
-        class="major-mono-display-regular glow-amber glow-border glow-box panel-grid"
+        class="major-mono-display-regular glow-amber glow-border glow-box flex flex-col gap-2 py-4"
     >
         <div>
             <p

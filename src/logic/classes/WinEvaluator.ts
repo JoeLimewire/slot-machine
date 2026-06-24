@@ -1,7 +1,7 @@
-import { SYMBOL_SCORES, ROWS } from "../config.ts";
+import { SYMBOL_SCORES, ROWS, type SymbolScore } from "../config.ts";
 
 export type Win = {
-    type: "vertical" | "horizontal" | "diagonal";
+    type: "vertical" | "horizontal" | "diagonal" | "jackpot";
     location: { start: [x: number, y: number]; end: [x: number, y: number] };
     description: string;
     points: number;
@@ -10,11 +10,11 @@ export type Win = {
 // Pure win evaluation: takes the visible grid and returns the wins found.
 // grid[col] = [top, middle, bottom] symbols for that column.
 export default class WinEvaluator {
-    evaluate(grid: string[][]): Win[] {
+    evaluate(grid: string[][], scores: SymbolScore = SYMBOL_SCORES): Win[] {
         const wins: Win[] = [];
         const row_arr = Array.from({ length: ROWS }, (_, i) => i); // iterable array for each row -> [0,1,2]
 
-        const scoreFor = (symbol: string) => SYMBOL_SCORES[symbol] ?? 0;
+        const scoreFor = (symbol: string) => scores[symbol] ?? 0;
 
         for (let i = 0; i < grid.length; i++) {
             const col = grid[i];
