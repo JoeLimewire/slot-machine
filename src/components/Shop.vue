@@ -34,7 +34,6 @@ const onSymbolSelected = (title: string) => {
 </script>
 
 <template>
-    <!-- Symbol picker shown after buying an item that needs icon selection -->
     <div v-if="pendingItem">
         <p class="mb-1 text-sm text-white/50">
             Buying:
@@ -48,7 +47,6 @@ const onSymbolSelected = (title: string) => {
     </div>
 
     <div v-else>
-        <!-- Items for sale -->
         <div class="mb-6 grid grid-cols-2 gap-3">
             <div
                 v-for="item in Items"
@@ -56,7 +54,9 @@ const onSymbolSelected = (title: string) => {
                 class="flex flex-col gap-2 rounded border border-white/20 p-3"
             >
                 <div class="flex items-start justify-between gap-2">
-                    <span class="text-sm font-bold text-white">{{ item.title }}</span>
+                    <span class="text-sm font-bold text-white">{{
+                        item.title
+                    }}</span>
                     <span
                         class="shrink-0 rounded px-1.5 py-0.5 text-xs"
                         :class="
@@ -88,7 +88,7 @@ const onSymbolSelected = (title: string) => {
 
         <!-- Active inventory -->
         <div v-if="inventory.activeItems.length > 0">
-            <p class="mb-2 text-xs uppercase tracking-widest text-white/40">Inventory</p>
+            <p class="mb-2 text-xs tracking-widest text-white/40">Inventory</p>
             <div class="flex flex-col gap-1">
                 <div
                     v-for="entry in inventory.activeItems"
@@ -97,15 +97,23 @@ const onSymbolSelected = (title: string) => {
                 >
                     <span>
                         {{ entry.item.title }}
-                        <span v-if="entry.selectedIcon" class="ml-1 text-xs text-white/40">
+                        <span
+                            v-if="entry.selectedIcon"
+                            class="ml-1 text-xs text-white/40"
+                        >
                             ({{ entry.selectedIcon }})
                         </span>
                     </span>
                     <span class="text-xs text-white/40">
                         <template v-if="entry.remainingUses !== undefined">
-                            {{ entry.remainingUses }} spin{{ entry.remainingUses !== 1 ? 's' : '' }} left
+                            {{ entry.remainingUses }} spin{{
+                                entry.remainingUses !== 1 ? "s" : ""
+                            }}
+                            left
                         </template>
-                        <template v-else-if="entry.quantity > 1">×{{ entry.quantity }}</template>
+                        <template v-else-if="entry.quantity > 1"
+                            >×{{ entry.quantity }}</template
+                        >
                     </span>
                 </div>
             </div>

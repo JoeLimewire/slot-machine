@@ -1,6 +1,6 @@
 import { reactive, toRaw } from "vue";
 import type { TypeItem } from "./collections/items.ts";
-import type { WeightedIcon, SymbolScore } from "../config.ts";
+import type { WeightedIcon, SymbolScore, ReelSymbol } from "../config.ts";
 
 export interface ActiveItem {
     item: TypeItem;
@@ -68,6 +68,43 @@ export default class Inventory {
                 return result;
             },
             base,
+        );
+    }
+
+    applyModifySymbols(base: ReelSymbol[]): ReelSymbol[] {
+        return toRaw(this.activeItems).reduce(
+            (symbols, entry) => {
+                const { quantity } = entry;
+                const hooks = toRaw(toRaw(entry.item).hooks);
+                if (!hooks.modifySymbols) return symbols;
+                let result = [...symbols];
+                for (let i = 0; i < quantity; i++) {
+                    result = hooks.modifySymbols(result);
+                }
+                return result;
+            },
+            [...base],
+        );
+    }
+
+    getNonChainingSymbols(): string[] {
+        return toRaw(this.activeItems).flatMap((entry) => {
+            const hooks = toRaw(toRaw(entry.item).hooks);
+            return hooks.nonChainingSymbols ?? [];
+        });
+    }
+
+    getPerVisibleScores(): { [symbol: string]: number } {
+        return toRaw(this.activeItems).reduce(
+            (acc, entry) => {
+                const hooks = toRaw(toRaw(entry.item).hooks);
+                const perVisible = hooks.perVisibleScore ?? {};
+                for (const [sym, pts] of Object.entries(perVisible)) {
+                    acc[sym] = (acc[sym] ?? 0) + pts * entry.quantity;
+                }
+                return acc;
+            },
+            {} as { [symbol: string]: number },
         );
     }
 

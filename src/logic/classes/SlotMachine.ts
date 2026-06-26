@@ -37,6 +37,7 @@ export default class SlotMachine {
     // the Tone nodes (same reason the reels are markRaw'd).
     private audio = markRaw(new ReelAudio());
     private currentWeights: WeightedIcon[] = WEIGHTED_SYMBOLS;
+    private currentSymbols: ReelSymbol[] = [];
     private inventory?: Inventory;
 
     constructor(
@@ -47,14 +48,19 @@ export default class SlotMachine {
     ) {
         this.inventory = inventory;
         this.symbols = this.loadSymbols();
+        this.currentSymbols = this.symbols;
         const iconHeight = displayRef.clientWidth / REELS;
 
         this.canvasController = new CanvasController(displayRef);
 
         this.reels = displayColumns.map((col) =>
             markRaw(
-                new Reel(col, iconHeight, this.symbols.length, STRIP_REPEATS, () =>
-                    this.pickWeighted(this.symbols),
+                new Reel(
+                    col,
+                    iconHeight,
+                    this.symbols.length,
+                    STRIP_REPEATS,
+                    () => this.pickWeighted(this.currentSymbols),
                 ),
             ),
         );
@@ -76,10 +82,13 @@ export default class SlotMachine {
 
             this.canvasController.clear();
 
-            // Apply inventory weight modifiers before each spin.
+            // Apply inventory modifiers before each spin.
             this.currentWeights =
                 this.inventory?.getEffectiveWeights(WEIGHTED_SYMBOLS) ??
                 WEIGHTED_SYMBOLS;
+            this.currentSymbols =
+                this.inventory?.applyModifySymbols(this.symbols) ??
+                this.symbols;
 
             // Fresh symbols off-screen before anything moves.
             this.reels.forEach((reel) => reel.reshuffleHidden());
@@ -95,8 +104,17 @@ export default class SlotMachine {
             let waitInterval = WIN_ANIM;
 
             const effectiveScores =
-                this.inventory?.getEffectiveScores(SYMBOL_SCORES) ?? SYMBOL_SCORES;
-            const wins = this.evaluator.evaluate(grid, effectiveScores);
+                this.inventory?.getEffectiveScores(SYMBOL_SCORES) ??
+                SYMBOL_SCORES;
+            const nonChaining = this.inventory?.getNonChainingSymbols() ?? [];
+            const perVisible = this.inventory?.getPerVisibleScores() ?? {};
+            const wins = this.evaluator.evaluate(
+                grid,
+                effectiveScores,
+                nonChaining,
+                perVisible,
+            );
+
             let i = 0;
 
             const winLoop = (): Promise<void> => {
@@ -105,17 +123,22 @@ export default class SlotMachine {
                         setTimeout(() => {
                             if (wins.length <= 0) resolve();
                             const win = wins[i];
+                            if (win.type !== "per-visible") {
+                                this.score.addScore(win.points * this.bet);
+                            } else {
+                                this.score.addScore(win.points);
+                            }
                             this.canvasController.drawLine(win.location);
-                            this.score.addScore(win.points * this.bet);
                             this.lastWin += win.points;
                             this.audio.playWin(i);
+
                             i++;
                             waitInterval /= 1.15;
 
                             if (i < wins.length) {
-                                step(); // recurse the inner fn — same promise
+                                step();
                             } else {
-                                resolve(); // the one resolve the caller awaits
+                                resolve();
                             }
                         }, waitInterval);
                     };
@@ -132,7 +155,6 @@ export default class SlotMachine {
                 this.audio.playJackpot();
                 await this.canvasController.drawJackpot();
             }
-
         } finally {
             // Always re-enable the button, even if a spin throws.
             this.isSpinning = false;

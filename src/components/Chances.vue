@@ -18,6 +18,12 @@ const effectiveScores = computed((): SymbolScore => {
     return props.inventory.getEffectiveScores(SYMBOL_SCORES);
 });
 
+const perVisibleScores = computed((): { [symbol: string]: number } => {
+    if (!props.inventory) return {};
+    props.inventory.activeItems.length;
+    return props.inventory.getPerVisibleScores();
+});
+
 const totalWeight = computed(() =>
     effectiveWeights.value.reduce((sum, s) => sum + s.weight, 0),
 );
@@ -31,17 +37,20 @@ const rows = computed(() =>
         .map((s) => {
             const baseWeight = WEIGHTED_SYMBOLS.find((w) => w.title === s.title)?.weight ?? 0;
             const baseScore = (SYMBOL_SCORES as SymbolScore)[s.title] ?? 0;
-            const score = effectiveScores.value[s.title] ?? 0;
+            const perVisible = perVisibleScores.value[s.title];
+            const isPerVisible = perVisible !== undefined;
+            const score = isPerVisible ? perVisible : (effectiveScores.value[s.title] ?? 0);
             return {
                 title: s.title,
                 src: getSrc(s.title),
                 chancePct: (s.weight / totalWeight.value) * 100,
                 chance: ((s.weight / totalWeight.value) * 100).toFixed(1) + "%",
                 score,
+                isPerVisible,
                 weightUp: s.weight > baseWeight,
                 weightDown: s.weight < baseWeight,
-                scoreUp: score > baseScore,
-                scoreDown: score < baseScore,
+                scoreUp: !isPerVisible && score > baseScore,
+                scoreDown: !isPerVisible && score < baseScore && score > 0,
             };
         }),
 );
@@ -72,9 +81,15 @@ const maxChance = computed(() =>
                     :class="{
                         'score-up': row.scoreUp,
                         'score-down': row.scoreDown,
+                        'score-per-visible': row.isPerVisible,
                     }"
                 >
-                    {{ row.score }}x
+                    <template v-if="row.isPerVisible">
+                        +{{ row.score }}/cell
+                    </template>
+                    <template v-else>
+                        {{ row.score }}x
+                    </template>
                 </td>
                 <td class="chance-col chance-cell">
                     <div class="chance-bar-wrap">
@@ -172,6 +187,11 @@ tbody td {
 .score-down {
     color: rgb(251, 191, 36);
     text-shadow: 0 0 6px rgba(251, 191, 36, 0.5);
+}
+
+.score-per-visible {
+    color: rgb(167, 139, 250);
+    text-shadow: 0 0 6px rgba(167, 139, 250, 0.5);
 }
 
 .chance-col {

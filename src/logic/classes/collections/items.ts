@@ -1,4 +1,9 @@
-import type { WeightedIcon, SymbolScore } from "../../config.ts";
+import type { WeightedIcon, SymbolScore, ReelSymbol } from "../../config.ts";
+
+const cherryPipSrc = new URL(
+    "../../../assets/symbols/cherry-pip.svg",
+    import.meta.url,
+).href;
 
 export type ItemHooks = {
     modifyWeights?: (
@@ -6,6 +11,9 @@ export type ItemHooks = {
         selectedIcon?: string,
     ) => WeightedIcon[];
     modifyScores?: (scores: SymbolScore, selectedIcon?: string) => SymbolScore;
+    modifySymbols?: (symbols: ReelSymbol[]) => ReelSymbol[];
+    nonChainingSymbols?: string[];
+    perVisibleScore?: { [symbol: string]: number };
 };
 
 export type TypeItem = {
@@ -22,11 +30,22 @@ const Items: TypeItem[] = [
     {
         title: "Cherry Pip",
         description:
-            "Replace all cherries with their pip. Pips score nothing but score +1 when they appear.",
+            "Cherries become pips. Pips cannot chain to win but score a flat 1 for each one visible.",
         type: "Permanent",
         cost: 5,
         hooks: {
-            modifyScores: (scores) => ({ ...scores, cherries: 1 }),
+            modifyWeights: (weights) =>
+                weights.map((w) =>
+                    w.title === "cherries" ? { ...w, title: "cherry-pip" } : w,
+                ),
+            modifySymbols: (symbols) =>
+                symbols.map((s) =>
+                    s.title === "cherries"
+                        ? { title: "cherry-pip", src: cherryPipSrc }
+                        : s,
+                ),
+            nonChainingSymbols: ["cherry-pip"],
+            perVisibleScore: { "cherry-pip": 1 },
         },
     },
     {

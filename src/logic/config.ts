@@ -22,14 +22,14 @@ export const WEIGHTED_SYMBOLS: WeightedIcon[] = [
 ];
 
 // export const WEIGHTED_SYMBOLS: WeightedIcon[] = [
-//     { title: "cherries", weight: 0 },
+//     { title: "cherries", weight: 1 },
 //     { title: "lemon", weight: 0 },
 //     { title: "grapes", weight: 0 },
 //     { title: "plum", weight: 0 },
 //     { title: "strawberry", weight: 0 },
 //     { title: "watermelon", weight: 0 },
 //     { title: "clover", weight: 0 },
-//     { title: "diamond", weight: 30 },
+//     { title: "diamond", weight: 0 },
 //     { title: "bell", weight: 0 },
 //     { title: "horseshoe", weight: 0 },
 //     { title: "bar", weight: 0 },

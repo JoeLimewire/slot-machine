@@ -47,7 +47,7 @@ export default class CanvasController {
         ctx.moveTo(sx, sy);
         ctx.lineTo(ex, ey);
         ctx.strokeStyle = "white";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = 15;
         ctx.lineCap = "round";
         ctx.shadowColor = neon;
         ctx.shadowBlur = 15;
