@@ -9,6 +9,7 @@ import Scoreboard from "./Scoreboard.vue";
 import Shop from "./Shop.vue";
 import Chances from "./Chances.vue";
 import Modal from "./Modal.vue";
+import SpinLever from "./SpinLever.vue";
 
 const displayRef = useTemplateRef("display");
 const displayColumns = useTemplateRef("column");
@@ -64,62 +65,59 @@ defineExpose({
 </script>
 
 <template>
-    <div
-        class="-2xl mx-auto my-4 w-full max-w-[80%] overflow-hidden rounded rounded-lg border-3 border-white"
-    >
-        <section
-            class="relative grid aspect-5/3 w-full grid-cols-5 overflow-hidden border-white"
-            ref="display"
+    <section class="flex flex-col justify-between">
+        <div
+            class="neon-box glow-blue glow-border glow-box mx-auto mb-4 flex w-full flex-row overflow-hidden rounded rounded-lg"
         >
             <div
-                class="will-change-transform backface-hidden"
-                ref="column"
-                v-for="n in 5"
-            ></div>
-        </section>
-    </div>
-    <div
-        class="flex grid flex-col lg:grid-cols-[auto_1fr_1fr] lg:grid-rows-[1fr_3fr_2fr]"
-    >
-        <input
-            type="button"
-            @click="spin"
-            value="Spin"
-            :disabled="slotMachine?.isSpinning ?? false"
-            class="neonderthaw-regular flicker row-span-3 h-full cursor-pointer border-2 border-cyan-400 bg-transparent px-8 py-3 text-6xl font-bold text-white shadow-[0_0_15px_rgba(34,211,238,0.5)] transition-all duration-300 text-shadow-[0_0_15px_rgba(34,211,238,1)] text-shadow-cyan-400 hover:bg-cyan-100 hover:text-gray-900 hover:shadow-[0_0_30px_rgba(34,211,238,0.8)] hover:text-shadow-none disabled:pointer-events-none disabled:cursor-default disabled:opacity-50 disabled:shadow-none disabled:grayscale disabled:text-shadow-none disabled:hover:bg-transparent disabled:hover:text-cyan-400 disabled:hover:shadow-none lg:aspect-1/1"
-        />
+                class="relative m-auto grid !aspect-5/3 h-full min-w-0 flex-1 grid-cols-5 overflow-hidden rounded-xl"
+                ref="display"
+            >
+                <div
+                    class="will-change-transform backface-hidden"
+                    ref="column"
+                    v-for="n in 5"
+                ></div>
+            </div>
+            <SpinLever
+                @pull="spin"
+                v-bind:isSpinning="slotMachine?.isSpinning"
+            />
+        </div>
 
-        <Bet
-            class="row-span-3"
-            v-model="currentBet"
-            :max="slotMachine?.score.score"
-        />
-        <Scoreboard
-            class="row-span-3"
-            :score="slotMachine?.score.score ?? 0"
-            :lastWin="slotMachine?.lastWin ?? 0"
-            :bet="slotMachine?.bet ?? 0"
-        />
-    </div>
+        <div class="flex flex-row">
+            <Bet
+                class="w-full"
+                v-model="currentBet"
+                :max="slotMachine?.score.score"
+            />
+            <Scoreboard
+                class="w-full"
+                :score="slotMachine?.score.score ?? 0"
+                :lastWin="slotMachine?.lastWin ?? 0"
+                :bet="slotMachine?.bet ?? 0"
+            />
+        </div>
 
-    <Modal
-        v-model="showShop"
-        title="shop"
-        glow-class="glow-purple neonderthaw-regular"
-    >
-        <Shop
-            :inventory="inventory"
-            :score="slotMachine?.score.score ?? 0"
-            :symbols="slotMachine?.symbols ?? []"
-            @purchase="handlePurchase"
-        />
-    </Modal>
+        <Modal
+            v-model="showShop"
+            title="shop"
+            glow-class="glow-purple neonderthaw-regular"
+        >
+            <Shop
+                :inventory="inventory"
+                :score="slotMachine?.score.score ?? 0"
+                :symbols="slotMachine?.symbols ?? []"
+                @purchase="handlePurchase"
+            />
+        </Modal>
 
-    <Modal
-        v-model="showChances"
-        title="chances"
-        glow-class="glow-red neonderthaw-regular"
-    >
-        <Chances :inventory="inventory" />
-    </Modal>
+        <Modal
+            v-model="showChances"
+            title="chances"
+            glow-class="glow-red neonderthaw-regular"
+        >
+            <Chances :inventory="inventory" />
+        </Modal>
+    </section>
 </template>

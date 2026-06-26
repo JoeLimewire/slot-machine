@@ -3,9 +3,6 @@ export type SymbolScore = { [title: string]: number };
 export type ReelSymbol = { src: string; title: string };
 
 // Draw weights — higher = more common. Rare symbols (seven/bar) seldom appear.
-// NOTE: titles must match the baked sprite filenames (assets/symbols-baked/*).
-// "cherry" currently does NOT match the "cherries" sprite, so that symbol draws
-// at weight 0 — preserved from the original; fix the title if that's unintended.
 export const WEIGHTED_SYMBOLS: WeightedIcon[] = [
     { title: "cherries", weight: 40 },
     { title: "lemon", weight: 35 },
@@ -22,7 +19,7 @@ export const WEIGHTED_SYMBOLS: WeightedIcon[] = [
 ];
 
 // export const WEIGHTED_SYMBOLS: WeightedIcon[] = [
-//     { title: "cherries", weight: 1 },
+//     { title: "cherries", weight: 100 },
 //     { title: "lemon", weight: 0 },
 //     { title: "grapes", weight: 0 },
 //     { title: "plum", weight: 0 },
@@ -33,7 +30,7 @@ export const WEIGHTED_SYMBOLS: WeightedIcon[] = [
 //     { title: "bell", weight: 0 },
 //     { title: "horseshoe", weight: 0 },
 //     { title: "bar", weight: 0 },
-//     { title: "seven", weight: 0 },
+//     { title: "seven", weight: 1 },
 // ];
 
 // Points awarded for a win with these symbols

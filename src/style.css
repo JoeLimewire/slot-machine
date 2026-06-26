@@ -343,6 +343,7 @@ code {
 }
 
 .glow-border {
+  /* border-radius: 2rem; */
   border: 2px solid white;
 }
 

@@ -97,21 +97,21 @@ watch(
         <!-- bottom row: spans all three columns -->
         <div class="bet-presets flex text-2xl">
             <button
-                class="glow-button glow-text"
+                class="glow-button glow-text py-3"
                 aria-label="Minimum bet"
                 @click="minBet"
             >
                 min
             </button>
             <button
-                class="glow-button glow-text"
+                class="glow-button glow-text py-3"
                 aria-label="Half bet"
                 @click="halfBet"
             >
                 half
             </button>
             <button
-                class="glow-button glow-text"
+                class="glow-button glow-text py-3"
                 aria-label="Maximum bet"
                 @click="maxBet"
             >
